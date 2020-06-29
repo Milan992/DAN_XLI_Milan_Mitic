@@ -37,6 +37,8 @@ namespace PrintApp
 
             worker.WorkerReportsProgress = true;
             worker.WorkerSupportsCancellation = true;
+
+            btnCancel.IsEnabled = false;
         }
 
         private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -46,12 +48,21 @@ namespace PrintApp
 
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            btnCancel.IsEnabled = false;
+
             MessageBox.Show("Printing completed.");
             pbProgress.Value = 0;
         }
 
+        /// <summary>
+        /// Creates number of txt files depending on number of copies and writes the text from text box in them.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
+            //btnCancel.IsEnabled = true;
+
             for (int i = 0; i < numberOfCopies; i++)
             {
                 if (worker.CancellationPending)
@@ -76,6 +87,11 @@ namespace PrintApp
             }
         }
 
+        /// <summary>
+        /// Cancels futher progress during printing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnCancel_Click(object sender, EventArgs e)
         {
             if (worker.IsBusy)
@@ -86,6 +102,8 @@ namespace PrintApp
 
         private void BtnPrint_Click(object sender, EventArgs e)
         {
+            btnCancel.IsEnabled = true;
+
             try
             {
                 worker.RunWorkerAsync();
@@ -99,6 +117,7 @@ namespace PrintApp
         private void TxtText_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox objTextBox = (TextBox)sender;
+            // text from text box
             text = objTextBox.Text;
         }
 
