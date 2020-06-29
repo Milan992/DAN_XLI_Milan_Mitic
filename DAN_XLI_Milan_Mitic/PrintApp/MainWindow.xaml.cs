@@ -1,20 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PrintApp
 {
@@ -39,6 +28,7 @@ namespace PrintApp
             worker.WorkerSupportsCancellation = true;
 
             btnCancel.IsEnabled = false;
+            btnPrint.IsEnabled = false;
         }
 
         private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -108,7 +98,7 @@ namespace PrintApp
             {
                 worker.RunWorkerAsync();
             }
-            catch 
+            catch
             {
                 MessageBox.Show("Already printing. . .");
             }
@@ -116,9 +106,16 @@ namespace PrintApp
 
         private void TxtText_TextChanged(object sender, TextChangedEventArgs e)
         {
+            btnPrint.IsEnabled = true;
+
             TextBox objTextBox = (TextBox)sender;
             // text from text box
             text = objTextBox.Text;
+
+            if (string.IsNullOrEmpty(text))
+            {
+                btnPrint.IsEnabled = false;
+            }
         }
 
         private void TxtNumberOfCopies_TextChanged(object sender, TextChangedEventArgs e)
