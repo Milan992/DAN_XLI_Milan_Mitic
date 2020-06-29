@@ -52,9 +52,13 @@ namespace PrintApp
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
-
             for (int i = 0; i < numberOfCopies; i++)
             {
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
                 Thread.Sleep(1000);
                 string location = (i + 1).ToString() + "." + DateTime.Now.ToString("dd_MM_yyyy_hh_mm");
                 try
@@ -102,6 +106,10 @@ namespace PrintApp
         {
             TextBox objTextBox = (TextBox)sender;
             int.TryParse(objTextBox.Text, out numberOfCopies);
+            if (!int.TryParse(objTextBox.Text, out numberOfCopies))
+            {
+                numberOfCopies = 1;
+            }
         }
 
         private void PbProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
