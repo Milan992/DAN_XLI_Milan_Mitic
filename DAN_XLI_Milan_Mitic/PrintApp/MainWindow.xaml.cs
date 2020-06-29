@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,25 +23,40 @@ namespace PrintApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        static string text = "";
+        static string text;
         static int numberOfCopies = 1;
+        private BackgroundWorker worker = new BackgroundWorker();
 
         public MainWindow()
         {
             InitializeComponent();
+
+            worker.DoWork += worker_DoWork;
+            worker.RunWorkerCompleted += worker_RunWorkerCompleted;
+            worker.ProgressChanged += worker_ProgressChanged;
+
+            worker.WorkerReportsProgress = true;
+            worker.WorkerSupportsCancellation = true;
         }
 
-
-        private void BtnCancel_Click(object sender, EventArgs e)
+        private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-
+            pbProgress.Value = e.ProgressPercentage;
         }
 
-        private void BtnPrint_Click(object sender, EventArgs e)
+        private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            MessageBox.Show("Printing completed.");
+            pbProgress.Value = 0;
+        }
+
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+
             for (int i = 0; i < numberOfCopies; i++)
             {
-                string location = (i + 1).ToString() +"." + DateTime.Now.ToString("dd_MM_yyyy_hh_mm");
+                Thread.Sleep(1000);
+                string location = (i + 1).ToString() + "." + DateTime.Now.ToString("dd_MM_yyyy_hh_mm");
                 try
                 {
                     using (StreamWriter sw = new StreamWriter(@"..\..\" + location + ".txt"))
@@ -51,6 +68,27 @@ namespace PrintApp
                 {
                     MessageBox.Show(exc.ToString());
                 }
+                worker.ReportProgress((i + 1) * (100 / numberOfCopies));
+            }
+        }
+
+        private void BtnCancel_Click(object sender, EventArgs e)
+        {
+            if (worker.IsBusy)
+            {
+                worker.CancelAsync();
+            }
+        }
+
+        private void BtnPrint_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                worker.RunWorkerAsync();
+            }
+            catch 
+            {
+                MessageBox.Show("Already printing. . .");
             }
         }
 
@@ -68,7 +106,6 @@ namespace PrintApp
 
         private void PbProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-
         }
     }
 }

@@ -10,7 +10,8 @@
         <TextBox x:Name="txtText" HorizontalAlignment="Left" Height="101" Margin="160,80,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="202" TextChanged="TxtText_TextChanged"/>
         <TextBox x:Name="txtNumberOfCopies" HorizontalAlignment="Left" Height="23" Margin="160,217,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="42" TextChanged="TxtNumberOfCopies_TextChanged"/>
         <Button x:Name="btnPrint" Content="Print" HorizontalAlignment="Left" Margin="401,80,0,0" VerticalAlignment="Top" Width="75" Click="BtnPrint_Click"/>
-        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="401,119,0,0" VerticalAlignment="Top" Width="75" Click="BtnCancel_Click"/>
+        <Button x:Name="btnCancel" Content="Cancel" HorizontalAlignment="Left" Margin="401,119,0,0" VerticalAlignment="Top" Width="75" Click="BtnCancel_Click">
+        </Button>
         <ProgressBar x:Name="pbProgress" HorizontalAlignment="Left" Height="41" Margin="160,279,0,0" VerticalAlignment="Top" Width="479" ValueChanged="PbProgress_ValueChanged"/>
         <Label Content="Enter text:" HorizontalAlignment="Left" Margin="164,54,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.684,-0.269"/>
         <Label Content="Number of copies:" HorizontalAlignment="Left" Margin="160,191,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.632,0.154"/>
